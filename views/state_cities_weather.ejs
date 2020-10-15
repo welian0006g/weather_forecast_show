@@ -1,0 +1,154 @@
+<% include _header %>
+<title>Insert title here</title>
+</head>
+<body>
+<div class="text-center"><h2><span id="current_state"></span> Major Cities Weather</h1></div>
+
+<div style="margin-left:20px"><h3>Real-Time forecast for <span id="current_city"></span> in the next 12 hour:</h3></div>
+<br/>
+<style>
+.navbar-default {
+    background-color: #F8F8F8;
+    border-color: #E7E7E7;
+}
+</style>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav" id="cities_li_list">
+    </ul>
+  </div>
+</nav>
+
+<table class="table table-bordered" style="margin-left:20px;margin-right:20px" id="weather_table">
+   <tr>
+      <td style="background-color: #E7E588">Time:</td>
+      <td style="background-color: #E7E588">10/15/2020,10:00:00AM</td>
+   </tr>
+   <tr>
+      <td>Summary</td>
+      <td>Clear</td>
+   </tr>
+   <tr>
+      <td>Icon</td>
+      <td>clear-night</td>
+   </tr>
+   <tr>
+      <td>Temperature</td>
+      <td>49.52</td>
+   </tr>
+   <tr>
+      <td>humidity</td>
+      <td>1</td>  
+   </tr>
+   <tr>
+      <td>pressure</td>
+      <td>1018.8</td>
+   </tr>
+</table>
+
+<button class="btn btn-primary" id="return_button" style="margin-left:20px">Return</button>
+<div id="test_div"></div>
+
+<script type="text/javascript">
+  
+
+   $(function() {
+      $.ajax({
+         url: "/Australia_Cities.json",
+         method: "get",
+         dataType: "json",
+         success: function(data) {
+             for(var i=0;i<data.length;i++){
+                 var cities_li_list_html = "";
+                 var target_city_result_html = "";
+                  if(data[i].OBJECTID_1 == "<%= object_id1  %>") {
+                    $("#current_state").html(data[i].name);
+                    for(var j=0;j<data[i].cities.length;j++){
+                        cities_li_list_html += ('<li><a href="/state_cities_weather?object_id1=<%=object_id1%>&city_name='+encodeURI(data[i].cities[j].name)+'" class="navbar_li">'+data[i].cities[j].name+'</a></li>');
+                    }   
+                    //Choose the first city in the array by default or others.
+                    var city_coordinates;
+                    
+                    //Possibly because of node version difference you need to add the following:
+                    if("<%= city_name  %>"=="" || "<%= city_name %>" == "undefined"){
+                       city_coordinates = data[i].cities[0].coordinates;
+                       $("#current_city").html('<font color="#3B7F89">'+data[i].cities[0].name+'</font>');
+                    } else {
+                       for(var k=0;k<data[i].cities.length;k++){
+                            if(decodeURI("<%=city_name%>")==data[i].cities[k].name){
+                                 city_coordinates = data[i].cities[k].coordinates;
+                                 $("#current_city").html('<font color="#3B7F89">'+data[i].cities[k].name+'</font>');
+                            }
+                       }
+                    }
+
+                    var api_request_url = "https://api.darksky.net/forecast/f833983a2a0b6bf2d767a3394b21f636/"+city_coordinates+"?callback=?";
+                    $.getJSON(api_request_url,
+                          function(data) {
+                             for(var j=0;j<12;j++) {
+                                 var single_data = data.hourly.data[j];
+                                 var d = new Date(0);
+                                 d.setUTCSeconds(single_data.time);
+                                 var aestTime = d.toLocaleString("en-US", {timeZone: "Australia/Sydney"});
+                                 target_city_result_html += '<tr><td style="background-color: #E7E588">Time:</td><td style="background-color: #E7E588">'+aestTime+'</td></tr>';
+                                 target_city_result_html += '<tr><td>Summary</td><td>'+data.hourly.data[j].summary+'</td></tr>';
+                                 target_city_result_html += '<tr><td>Icon</td><td>'+getCustomIcon(data.hourly.data[j].icon)+'</td></tr>';
+                                 target_city_result_html += '<tr><td>Temperature</td><td>'+data.hourly.data[j].temperature+'</td></tr>';
+                                 target_city_result_html += '<tr><td>humidity</td><td>'+data.hourly.data[j].humidity+'</td></tr>';
+                                 target_city_result_html += '<tr><td>Pressure</td><td>'+data.hourly.data[j].pressure+'</td></tr>';
+                             }
+                          //The following must be inside this getJSON block.
+                          $("#weather_table").html(target_city_result_html);
+                    }); 
+         
+                    $("#cities_li_list").html(cities_li_list_html);
+                    //The following must right after .html(x);
+                    $(".navbar_li").hover(function() {
+                        $(this).css('background-color','#A6BFF0');
+                    },function() {
+                        $(this).css('background-color','#F8F8F8');
+                    });
+                 }             
+             }
+         },
+         error: function(data) {
+             alert("There has been an error");
+         }
+      });
+       
+      $("#return_button").click(function(){
+         window.location.href="/map_display";
+      }); 
+   });
+
+   function getCustomIcon(string) {
+      var result_image_html = "";
+      switch(string) {
+          case "cloudy":
+             result_image_html = '<img src="http://localhost:3000/images/cloudy.png" width="50px" height="50px"></img>';
+             break;
+          case "clear-day":
+             result_image_html = '<img src="http://localhost:3000/images/clear-day.png" width="50px" height="50px"></img>';
+             break;
+          case "partly-cloudy-day":
+             result_image_html = '<img src="http://localhost:3000/images/partly-cloudy-day.png" width="50px" height="50px"></img>';
+             break;
+          case "clear-night":
+             result_image_html = '<img src="http://localhost:3000/images/clear-night.png" width="50px" height="50px"></img>';
+             break;
+          case "partly-cloudy-night":
+             result_image_html = '<img src="http://localhost:3000/images/partly-cloudy-night.png" width="50px" height="50px"></img>';
+             break;
+          case "rain":
+             result_image_html = '<img src="http://localhost:3000/images/rain.png" width="50px" height="50px"></img>';
+             break;
+          default:
+             result_image_html = string;
+      }
+      return result_image_html;
+   }
+</script>
+
+<% include _footer %>
+
+

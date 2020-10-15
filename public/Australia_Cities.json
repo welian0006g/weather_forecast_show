@@ -1,0 +1,13 @@
+[{"OBJECTID_1":3640, "name":"Macquarie Island" , "cities": [{"name":"Macquarie Island","coordinates": "-54.49,158.94"}]},
+ {"OBJECTID_1":6324,  "name":"Northern Territory", "cities": [{"name":"Darwin","coordinates": "-12.46,130.84"},{"name":"Alice Spring","coordinates":"-23.70,133.88"}]},
+ {"OBJECTID_1":6322,  "name":"Western Australia", "cities": [{"name":"Perth","coordinates": "-31.95,115.85"},{"name": "Rockingham","coordinates":"-32.28,115.72"}]},
+ {"OBJECTID_1":2573,  "name":"New South Wales","cities": [{"name":"Sydney","coordinates":"-33.86,151.2"},{"name":"New Castle","coordinates":"-32.91,151.75"},
+                                                         {"name":"Wollongong","coordinates":"-34.42,150.89"},{"name":"Penrith","coordinates":"-33.75,150.70"},
+                                                         {"name":"Gosford","coordinates":"-33.42,151.34"}]},
+ {"OBJECTID_1":2555,  "name":"South Australia","cities": [{"name":"Adelaide","coordinates":"-34.92,138.59"},{"name":"Mount Gambier","coordinates":"-37.82,140.78"}]},
+ {"OBJECTID_1":2554,  "name":"Victoria","cities": [{"name":"Melbourne","coordinates":"-37.84,144.94"},{"name":"Geelong","coordinates":"-38.15,144.35"},
+                                                   {"name":"Ballarat","coordinates":"-37.54,143.85"},{"name":"Bendigo","coordinates":"-36.75,144.27"}]},
+ {"OBJECTID_1":6323,  "name":"Queensland","cities": [{"name":"Brisbane","coordinates":"-27.47,153.02"},{"name":"Gold Coast","coordinates":"-28.01,153.39"},
+                                                     {"name":"Sunshine Coast","coordinates":"-26.65,153.06"},{"name":"Townsville","coordinates":"-19.25,146.81"}]},
+ {"OBJECTID_1":2553,  "name":"Tasmania","cities": [{"name":"Hobart","coordinates":"-42.88,147.32"}]}]
+ 
